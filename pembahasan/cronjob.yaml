@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: example-cron
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      completions: 4
+      parallelism: 2
+      template:
+        metadata:
+          name: job
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: container-job
+              image: busybox:latest
+              command: ["echo", "hello"]

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-configmap
+data:
+  MYSQL_ROOT_PASSWORD: secret
+  MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-db
+  labels:
+    db: my-db
+spec:
+  containers:
+    - name: my-db
+      image: mysql:latest
+      envFrom:
+        - configMapRef:
+            name: mysql-configmap
+      ports:
+        - containerPort: 3306

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-statefullset
+  labels:
+    name: mysql-statefull
+spec:
+  serviceName: mysql-statefullset-service
+  replicas: 2
+  selector:
+    matchLabels:
+      name: mysql-statefull
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-stateful-volume-claim
+      spec:
+        storageClassName: ""
+        accessModes:
+          - ReadWriteOnce
+        volumeMode: Filesystem
+        resources:
+          requests:
+            storage: 1Gi
+  template:
+    metadata:
+      name: mysql-statefull
+      labels:
+        name: mysql-statefull
+    spec:
+      containers:
+        - name: mysql-statefull
+          image: mysql:latest
+          envFrom:
+            - configMapRef:
+                name: mysql-configmap
+            - secretRef:
+                name: mysql-password
+          volumeMounts:
+            - mountPath: /app/data
+              name: mysql-stateful-volume-claim

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx-statefullset
+  labels:
+    name: nginx-statefull
+spec:
+  serviceName: nginx-statefullset-service
+  replicas: 3
+  selector:
+    matchLabels:
+      name: nginx-statefull
+  volumeClaimTemplates:
+    - metadata:
+        name: nginx-stateful-volume-claim
+      spec:
+        storageClassName: ""
+        accessModes:
+          - ReadWriteOnce
+        volumeMode: Filesystem
+        resources:
+          requests:
+            storage: 1Gi
+  template:
+    metadata:
+      name: nginx-statefull
+      labels:
+        name: nginx-statefull
+    spec:
+      containers:
+        - name: nginx-statefull
+          image: nginx:latest
+          volumeMounts:
+            - mountPath: /app/data
+              name: nginx-stateful-volume-claim

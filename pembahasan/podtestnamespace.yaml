@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-pod
+  namespace: production
+spec: 
+  containers:
+  - name: db-container
+    image: mysql:latest
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: secret
+    ports:
+    - containerPort: 3306
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-pod
+  namespace: development
+spec:
+  containers:
+  - name: db-container
+    image: mysql:latest
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: secret
+    ports:
+    - containerPort: 3306
